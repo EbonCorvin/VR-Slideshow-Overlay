@@ -20,6 +20,13 @@ class App:
 
         settingFrameContainer = tk.Frame(root);
 
+        if len(LoadPlugins.plugin_descriptive_text)==0:
+            text = "No plugin found in the plugin folder!";
+            label = tk.Label(settingFrameContainer, text=text, font=tkFont.Font(family='Segoe UI',size=16))
+            label.grid(row=1,column=1,padx=5,pady=5);
+            settingFrameContainer.grid(row=0, column=2, padx=5, sticky="N")
+            return;
+
         row = 0;
         for plugin in LoadPlugins.plugin_descriptive_text:
             attr = LoadPlugins.plugin_descriptive_text[plugin];
