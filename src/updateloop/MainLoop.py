@@ -14,6 +14,10 @@ ONUPDATE_RETRY_COUNT = 3;
 SLIDESHOW_ALWAYS_ONTOP = "";
 SLIDESHOW_ALWAYS_ATBOTTOM = "";
 
+class EmptySlideshow:
+    def onUpdate(self,scriptUpTime):
+        return "";
+
 def update_loop():
     disabledPlugin = [x for x in LoadPlugins.modules.keys() if not LoadPlugins.modules[x].PLUGIN_ENABLED];
     LoadPlugins.remove_unusable_plugin(disabledPlugin);
@@ -28,16 +32,27 @@ def update_loop():
     outputs = [x for x in [VRCOsc, FileOutput] if getattr(x, "IS_ENABLED")];
     for output in outputs:
         output.init();
+    
+    topSlideshow = plugins.get(SLIDESHOW_ALWAYS_ONTOP,EmptySlideshow());
+    bottomSlideshow = plugins.get(SLIDESHOW_ALWAYS_ATBOTTOM,EmptySlideshow());
+
+    if SLIDESHOW_ALWAYS_ONTOP!="" and SLIDESHOW_ALWAYS_ONTOP in plugins:
+        del plugins[SLIDESHOW_ALWAYS_ONTOP];
+    if SLIDESHOW_ALWAYS_ATBOTTOM!="" and SLIDESHOW_ALWAYS_ATBOTTOM in plugins:
+        del plugins[SLIDESHOW_ALWAYS_ATBOTTOM];
         
     scriptUpTime = 0;
     scriptStartTime = time.time();
     while True:
         for module in plugins:
             try:
+                topText = topSlideshow.onUpdate(scriptUpTime);
                 strText = plugins[module].onUpdate(scriptUpTime);
-                print(strText);
+                bottomText = bottomSlideshow.onUpdate(scriptUpTime);
+                outputStr = [topText,strText,bottomText];
+                print(outputStr);
                 for output in outputs:
-                    output.outputString([strText]);
+                    output.outputString(outputStr);
                 time.sleep(SLIDESHOW_INTERVAL);
             except Exception as ex:
                 print("Cannot get update from plugin",module);
