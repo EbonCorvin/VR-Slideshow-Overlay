@@ -2,6 +2,7 @@ from gui import S1_StartWindow, S2_SettingWindow;
 import tkinter as tk;
 from updateloop import MainLoop, LoadPlugins;
 import config;
+import os;
 
 root = None;
 
@@ -25,6 +26,7 @@ def switchWindow(windowClass):
     root.mainloop();
 
 if __name__ == '__main__':
-    LoadPlugins.read_plugins();
+    LoadPlugins.read_plugins(os.path.join(os.getcwd(),"plugins"));
+    config.register_general_setting();
     config.readConfig();
     switchWindow(S1_StartWindow.App);

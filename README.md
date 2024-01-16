@@ -40,7 +40,10 @@ The application comes with the following plugins:
 
 If you choose to run osc_start.exe, you are all set already! No additional setup is required.
 
-However, if you want to use a few plugins, you may have to go to the setting screens of the plugins, and provide the client ID and secret (SpotifyTrack), or auth cookie (OnlineFriends), in order to allow the script to grab the information from the official server and display them as slideshow.
+However, some plugins may require some setting to run. Please go to the setting screen and provide the required setting to use the following plugins:
+
+- SpotifyTrack - client ID and client secret
+- OnlineFriends - auth cookie
 
 If you want to run the script by yourself, you may have to install the following library:
 

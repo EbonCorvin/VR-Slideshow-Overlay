@@ -4,10 +4,9 @@ import os,sys;
 modules = {};
 plugins = {};
 plugins_error_count = {};
-plugin_dir = os.path.join(os.getcwd(),"plugins");
 plugin_descriptive_text = {};
 
-def read_plugins():
+def read_plugins(plugin_dir):
     sys.path.append(os.path.join(plugin_dir, "lib"));
     for path, subfolders, files in os.walk(plugin_dir):
         for file in files:

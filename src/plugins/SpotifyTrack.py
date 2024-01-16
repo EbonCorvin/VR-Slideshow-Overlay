@@ -9,6 +9,8 @@ SONG_CHAT_TEXT_FORMAT = "Currently playing on Spotify:\v{} - {}{}";
 MODULE_NAME = "GetSpotifyTrack";
 MODULE_DESC = "Show current Spotify track"
 
+PLUGIN_ENABLED = False;
+
 config.addConfig(__name__, "CLIENT_ID", "Your Spotify developer client ID.", "str")
 config.addConfig(__name__, "CLIENT_SECRET", "Your Spotify developer client secret code.", "str")
 
