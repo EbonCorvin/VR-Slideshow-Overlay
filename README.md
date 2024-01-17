@@ -4,27 +4,19 @@
 
 ## False antivirus alarm
 
-It's found that some antivirus may make a false alarm when you're attempting to run this application. It's most likely because most of the anti-virus doesn't like program that has a bunch of file packed together inside it. If you're worried about the false alarm, you can fetch the whole source code and run it as a python script instead.
+You may get a false antivirus alarm (e.g. Avast) when you are trying to run the built version (exe). Please add the location of the application as an exception in your antivirus software or pull the whole source code and run it in Python instead.
 
 ## Description
 
-Please grab the latest version of the program from the release folder!
+Please grab the latest stable built version (exe) from the "Releases" section (right panel) or pull the latest source code and run it in Python.
 
-You like attention? If the answer is positive, then I hope that this little application can fulfill your daily need of attention! This little python script displays a slidershow of information overhead when you're playing VRChat.
+It's a simple OSC chatbox slideshow application that show various information with VRChat's chatbox, just like other chatbox script that you can see in the public worlds.
 
-The content of the slideshow is variable, it can range from the most common information like the local time and the spotify track your're currently playing, to some silly information that could grab the eyeballs when you're wandering around in the public world or hanging out with your friends!
-
-The application is easy to run, no python executable is needed, no a bunch of "python -m pip library_name" is required, just run osc_start.exe and you're all set! Of course you can click on the "Setting" button to do some configuration first, but you can also go straight to the "Start" button to start the slideshow immediately.
-
-Feeling nerdy or wanted to do some code change before running it? You can also fetch the source code from the respository, and they're all yours and you can do whatever you want with them!
-
-Also, every slideshow is a plugin in the application. You can locate to the plugins folder, creating your own script and run it immediately! You don't have to fetch the whole source code and do the compilation just to include your pride self-made slideshow plugin!
+It comes with 9 slideshow plugins that provide various information, and you can configure most of them to your need with a graphical user interface.
 
 ## Features
 
-With this application, you unlock the ability to display a slideshow with VRChat's OSC chatbox overhead when you're in the game. Every slideshow is a plugin and is loaded on demand, and you can create your own plugin and display the information this application is not currently providing.
-
-The application comes with the following plugins:
+The application comes with the following slideshow plugins:
 
 - ForegroundWindow.py - Display the title of the top-most window you're on
 - GPUUsage.py - Display the GPU usage information (VRAM / Temperature / Usage)
@@ -35,6 +27,15 @@ The application comes with the following plugins:
 - PCUsage.py - Display the PC usage information (RAM / CPU / Usage)
 - SpotifyTrack.py - Display the current Spotify track you're listening to
 - VRCUptime.py - Display your VRChat uptime (The time passed since you have played VRChat)
+
+Every slideshow plugin is a Python script that you can edit in the “plugins” folder. You can also create your own plugin to display information the original application doesn’t support. Please have a look at the in the “example” folder.
+
+Also, other than outputting to VRChat, you can also enable outputting to other location:
+
+- Text file. Useful if you want the output text to be read by other application, like OBS streaming application.
+- ~~OpenVR overlay (Coming Soon™). You can keep the output text to yourself by displaying them in your VR overlay.~~
+
+The application may open to create new output location. For now, you can look at the example folder and see how you create a new output location.
 
 ## Installation
 
@@ -52,17 +53,19 @@ If you want to run the script by yourself, you may have to install the following
 - GPUtil
 - requests
 
-I assuem everyone who choose to run the scrpt by themselves already have the experience on Python programming. Please try not to ask me about running the script by themeselves.
+I assume everyone who choose to run the script by themselves already have the experience on Python programming. Please try not to ask me about running the script by themselves.
 
 ## Usage
 
-Explain how to use your application. Provide code examples or screenshots if applicable.
+If you downladed the built (exe) version, please run osc_start.exe to start the application. If you pulled the whole source code, please run osc_start.py in Python.
+
+A window will appear after you run the application. You can click on the "Start" button to start outputting text to VRChat immediately; Or click on the "Setting..." button for the "Setting Screen".
 
 ## Contributing
 
-To anyone who want to make any contribution to the project.Please feel free to push the plugin you write so that it could be included in the next update of the application. Also, bug fixes and improvement are welcomed.
+To anyone who want to make any contribution to the project. Please feel free to push the plugin you write so that it could be included in the next update of the application. Also, bug fixes and improvement are welcomed.
 
-If you found any bug or area of improvement when you're using the application, please open a issue ticket so that I could investigate and fix it as soon as possible.
+If you found any bug or area of improvement when you're using the application, please open an issue ticket so that I could investigate and fix it as soon as possible.
 
 ## License
 

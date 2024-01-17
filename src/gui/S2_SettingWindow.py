@@ -26,8 +26,16 @@ class App:
             label.grid(row=1,column=1,padx=5,pady=5);
             settingFrameContainer.grid(row=0, column=2, padx=5, sticky="N")
             return;
+    
+        btn=tk.Button(root, text="General Setting")
+        btn["bg"] = "#f0f0f0"
+        btn["font"] = btnFont
+        btn["fg"] = "#000000"
+        btn["justify"] = "center"
+        btn.grid(row=0,column=0,columnspan=2, padx=5,pady=10);
+        btn["command"] = functools.partial(self.buildGeneralSettingUi, root=settingFrameContainer);
 
-        row = 0;
+        row = 1;
         for plugin in LoadPlugins.plugin_descriptive_text:
             attr = LoadPlugins.plugin_descriptive_text[plugin];
             chk = tk.Checkbutton(root,text=attr[0]);
@@ -64,6 +72,27 @@ class App:
         self.addConfigControls(frame, plugin)
         self.previousSettingFrame = frame;
 
+    def buildGeneralSettingUi(self, root):
+        if self.previousSettingFrame is not None:
+            self.previousSettingFrame.destroy();
+        frame = tk.Frame(root);
+        frame.grid(row=0, column=2, padx=5)
+        tk.Label(frame, justify="center", text="General Settings", font=tkFont.Font(family='Segoe UI',size=16)).grid(row=0, column=0, padx=5);
+        curRow = 1;
+        allControls = {};
+        for section in config.CONFIG_GENERAL_MODULE:
+            allControls[section] = {};
+            tk.Label(frame, justify="center", text=section, font=tkFont.Font(family='Segoe UI',size=12)).grid(row=curRow, column=0, padx=5, pady=5)
+            curRow+=1;
+            configList = config.CONFIG[section];
+            for key in configList:
+                curRow, var = self.createControl(key, section, configList, frame, curRow);
+                allControls[section][key] = var;
+        saveBtn=tk.Button(frame, text="Save");
+        saveBtn["command"] = functools.partial(self.saveGeneralSetting, controls=allControls);
+        saveBtn.grid(row=curRow,pady=10);
+        self.previousSettingFrame = frame;
+ 
     def addConfigControls(self, root, plugin):
         curRow = 3;
         if not plugin in config.CONFIG:
@@ -71,16 +100,17 @@ class App:
             label.grid(row=curRow);
             return;
         configList = config.CONFIG[plugin];
-        self.controls = {};
+        controls = {};
         for key in configList:
-            curRow = self.createControl(key, plugin, configList, root, curRow);
+            curRow, var = self.createControl(key, plugin, configList, root, curRow);
+            controls[key] = var;
         saveBtn=tk.Button(root, text="Save")
-        saveBtn["command"] = functools.partial(self.saveSetting, configs=configList, plugin=plugin);
+        saveBtn["command"] = functools.partial(self.saveSetting, configs=configList, controls=controls, plugin=plugin);
         saveBtn.grid(row=curRow,pady=10);
     
     def createControl(self, key, plugin, configList, root, curRow):
         configdesc, valuetype = configList[key];
-        defaultValue = getattr(LoadPlugins.modules[plugin],key);
+        defaultValue = getattr(LoadPlugins.modules.get(plugin, config.CONFIG_GENERAL_MODULE.get(plugin)),key);
         var = None;
         if valuetype!="bool":
             label = tk.Label(root, text=configdesc, font=self.labelFont);
@@ -98,22 +128,24 @@ class App:
             control["textvariable"] = var;
         elif valuetype=="bool":
             control = tk.Checkbutton(root, text=configdesc, font=self.labelFont, variable=var, onvalue=True, offvalue=False);
-        self.controls[key] = var;
         control.grid(row=curRow);
         curRow+=1;
-        return curRow;
+        return curRow, var;
 
-
-    def saveSetting(self, configs, plugin):
-        for key in self.controls:
-            value = self.controls[key].get()
-            print(key, value)
+    def saveSetting(self, configs, controls, plugin, module = None):
+        module = module if module is not None else LoadPlugins.modules[plugin];
+        for key in controls:
+            value = controls[key].get()
             if configs[key][1]=="bool":
                 value = value==1;
             elif configs[key][1]=="num":
                 value = int(value)
-            setattr(LoadPlugins.modules[plugin], key, value);
+            setattr(module, key, value);
 
+    def saveGeneralSetting(self, controls):
+        for section in controls:
+            self.saveSetting(config.CONFIG[section], controls[section], None, config.CONFIG_GENERAL_MODULE[section]);
+    
     def togglePlugin(self, plugin, value):
         LoadPlugins.modules[plugin].PLUGIN_ENABLED = value.get()==1;
 

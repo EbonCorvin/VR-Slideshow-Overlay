@@ -11,7 +11,7 @@ config.addConfig("Slideshow", "SLIDESHOW_ALWAYS_ATBOTTOM", "Slideshow that is al
 
 SLIDESHOW_INTERVAL = 7;
 ONUPDATE_RETRY_COUNT = 3;
-SLIDESHOW_ALWAYS_ONTOP = "";
+SLIDESHOW_ALWAYS_ONTOP = "LocalTime";
 SLIDESHOW_ALWAYS_ATBOTTOM = "";
 
 class EmptySlideshow:
@@ -19,6 +19,7 @@ class EmptySlideshow:
         return "";
 
 def update_loop():
+    outputs = [VRCOsc, FileOutput];
     disabledPlugin = [x for x in LoadPlugins.modules.keys() if not LoadPlugins.modules[x].PLUGIN_ENABLED];
     LoadPlugins.remove_unusable_plugin(disabledPlugin);
     LoadPlugins.init_plugins();
@@ -29,7 +30,7 @@ def update_loop():
         print("No valid plugin found, the script can't run");
         return;
 
-    outputs = [x for x in [VRCOsc, FileOutput] if getattr(x, "IS_ENABLED")];
+    outputs = [x for x in outputs if getattr(x, "IS_ENABLED")];
     for output in outputs:
         output.init();
     

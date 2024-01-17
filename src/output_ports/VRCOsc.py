@@ -1,7 +1,7 @@
 from pythonosc import udp_client
 import config;
 
-config.add_general_setting_path("VRCOsc", "updateloop.MainLoop.VRCOsc")
+config.add_general_setting_path("VRCOsc", "output_ports.VRCOsc")
 config.addConfig("VRCOsc", "IS_ENABLED", "Enable outputting to VRChat chatbox?", "bool")
 config.addConfig("VRCOsc", "VRC_OSC_ADDR", "VRChat OSC Address", "str")
 config.addConfig("VRCOsc", "VRC_OSC_PORT", "VRChat OSC Port", "num")

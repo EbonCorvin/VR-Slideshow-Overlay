@@ -34,9 +34,10 @@ def saveConfig():
 def readConfig():
     try:
         file = open(os.path.join(os.getcwd(),CONFIG_FILENAME), mode="r+", buffering=1024, encoding="utf8");
-        setting = file.readline();
+        settingJson = file.readlines();
+        settingJson = " ".join(settingJson);
         file.close();
-        setting = json.loads(setting);
+        setting = json.loads(settingJson);
         for plugin in CONFIG:
             if plugin in setting:
                 # Only process the config keys that are registered already

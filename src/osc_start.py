@@ -13,7 +13,7 @@ def commandCallback(command):
     if command=="configwindow":
         switchWindow(S2_SettingWindow.App)
     if command=="settingwinclose":
-        print("Window Closed!");
+        # print("Window Closed!");
         config.saveConfig();
         switchWindow(S1_StartWindow.App);
 
