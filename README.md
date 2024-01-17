@@ -46,6 +46,8 @@ However, some plugins may require some setting to run. Please go to the setting 
 - SpotifyTrack - client ID and client secret
 - OnlineFriends - auth cookie
 
+You can learn how to get the mentioned setting in the Wiki page of this project.
+
 If you want to run the script by yourself, you may have to install the following library:
 
 - python-osc
