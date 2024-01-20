@@ -82,7 +82,7 @@ class App:
         allControls = {};
         for section in config.CONFIG_GENERAL_MODULE:
             allControls[section] = {};
-            tk.Label(frame, justify="center", text=section, font=tkFont.Font(family='Segoe UI',size=12)).grid(row=curRow, column=0, padx=5, pady=5)
+            tk.Label(frame, justify="center", text=section, font=tkFont.Font(family='Segoe UI',size=12)).grid(row=curRow, column=0, padx=0, pady=0)
             curRow+=1;
             configList = config.CONFIG[section];
             for key in configList:

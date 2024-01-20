@@ -1,5 +1,5 @@
 import time
-from output_ports import VRCOsc, FileOutput
+from output_ports import VRCOsc, FileOutput, VROverlay
 import config;
 from updateloop import LoadPlugins
 
@@ -19,7 +19,9 @@ class EmptySlideshow:
         return "";
 
 def update_loop():
-    outputs = [VRCOsc, FileOutput];
+    outputs = [VRCOsc, FileOutput, VROverlay];
+
+    # TODO: Remove "remove_unusable_plugin" functions and disable plugin that cannot be initialized.
     disabledPlugin = [x for x in LoadPlugins.modules.keys() if not LoadPlugins.modules[x].PLUGIN_ENABLED];
     LoadPlugins.remove_unusable_plugin(disabledPlugin);
     LoadPlugins.init_plugins();
@@ -32,7 +34,17 @@ def update_loop():
 
     outputs = [x for x in outputs if getattr(x, "IS_ENABLED")];
     for output in outputs:
-        output.init();
+        try:
+            output.init();
+        except Exception as ex:
+            print("Unable to initialize output location: ",output.__name__);
+            print(str(ex));
+            setattr(output, "IS_ENABLED", False);
+    outputs = [x for x in outputs if getattr(x, "IS_ENABLED")];
+
+    if len(outputs)==0:
+        print("No valid output location found, the script can't run");
+        return;
     
     topSlideshow = plugins.get(SLIDESHOW_ALWAYS_ONTOP,EmptySlideshow());
     bottomSlideshow = plugins.get(SLIDESHOW_ALWAYS_ATBOTTOM,EmptySlideshow());

@@ -6,7 +6,7 @@ CLIENT_ID = "SPOTIFY_CIENT_ID"
 CLIENT_SECRET = "SPOTIFY_SECRET";
 SONG_CHAT_TEXT_FORMAT = "Currently playing on Spotify:\v{} - {}{}";
 
-MODULE_NAME = "GetSpotifyTrack";
+MODULE_NAME = "SpotifyTrack";
 MODULE_DESC = "Show current Spotify track"
 
 PLUGIN_ENABLED = False;

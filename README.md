@@ -10,7 +10,7 @@ You may get a false antivirus alarm (e.g. Avast) when you are trying to run the 
 
 Please grab the latest stable built version (exe) from the "Releases" section (right panel) or pull the latest source code and run it in Python.
 
-It's a simple OSC chatbox slideshow application that show various information with VRChat's chatbox, just like other chatbox script that you can see in the public worlds.
+It's a simple OSC chatbox slideshow application that show various information in VRChat's chatbox and / or VR Overlay.
 
 It comes with 9 slideshow plugins that provide various information, and you can configure most of them to your need with a graphical user interface.
 
@@ -33,7 +33,7 @@ Every slideshow plugin is a Python script that you can edit in the “plugins”
 Also, other than outputting to VRChat, you can also enable outputting to other location:
 
 - Text file. Useful if you want the output text to be read by other application, like OBS streaming application.
-- ~~OpenVR overlay (Coming Soon™). You can keep the output text to yourself by displaying them in your VR overlay.~~
+- OpenVR overlay (Experimental). You can keep the output text to yourself by displaying them in VR overlay. Currently the overlay is attached on your right controller, and the customization option is limited. Also expect bugs because it's still an experimental feature!
 
 The application may open to create new output location. For now, you can look at the example folder and see how you create a new output location.
 
@@ -52,6 +52,7 @@ If you want to run the script by yourself, you may have to install the following
 - psutil
 - GPUtil
 - requests
+- openvr
 
 I assume everyone who choose to run the script by themselves already have the experience on Python programming. Please try not to ask me about running the script by themselves.
 
