@@ -17,6 +17,8 @@ OVERLAY_BACKGROUND = ImageColor.getrgb("#000000AA");
 WIDTH = 400;
 HEIGHT = 250
 WIDTH_IN_METER = 0.15
+VR_OVERLAY_KEY = "OSCChatBox_Overlay";
+VR_OVERLAY_NAME = "OSC Slideshow Overlay";
 
 font = None;
 img = None;
@@ -24,35 +26,53 @@ draw = None
 overlay = None;
 handle = None;
 vrSystem = None;
-imageData = ctypes.c_buffer(b'', WIDTH * HEIGHT * 4);
+imageData = None;
 
 def init():
     if openvr.isRuntimeInstalled()==0 or openvr.isHmdPresent()==0:
         raise Exception("This feature requires a VR headset!");
+    isOutputReady();
     initImage();
-    initVROverlay();
-    createOverlay();
+
+def isOutputReady():
+    global vrSystem;
+    global handle;
+    global overlay;
+    try:
+        if vrSystem is None:
+            vrSystem = openvr.init(openvr.VRApplication_Background);
+        # Not sure if we need it or not, because if you close SteamVR,
+        # it closes everything for you, including this script and VRChat
+        # vrEvent = openvr.VREvent_t();
+        # vrSystem.pollNextEvent(vrEvent);
+        # if(vrEvent.eventType==openvr.VREvent_Quit):
+        #     openvr.shutdown();
+        #     vrSystem = None;
+        #     raise Exception("You are exiting VR, cleaning up...");
+        controller = vrSystem.getTrackedDeviceIndexForControllerRole(openvr.TrackedControllerRole_RightHand)
+        if controller==openvr.k_unTrackedDeviceIndexInvalid:
+            raise Exception("No valid controller found. Did it turn off?")
+        overlay = openvr.IVROverlay();
+        try:
+            handle = overlay.findOverlay(VR_OVERLAY_KEY);
+        except openvr.error_code.OverlayError_UnknownOverlay:
+            createOverlay(controller);
+        return True;
+    except Exception as ex:
+        print(translateError(ex))
+        return False;
 
 def initImage():
     global font;
     global img;
     global draw;
+    global imageData;
     font = ImageFont.truetype(FONT_NAME, 24)
     img = Image.new("RGBA", (WIDTH,HEIGHT), 0);
     draw = ImageDraw.Draw(img);
+    imageData = ctypes.c_buffer(b'', WIDTH * HEIGHT * 4);
 
-def initVROverlay():
-    global vrSystem;
-    global overlay;
-    try:
-        vrSystem = openvr.init(openvr.VRApplication_Background);
-        if vrSystem is None:
-            raise Exception("No valid VR environment found");
-        overlay=openvr.IVROverlay();
-    except Exception as ex:
-        translateAndRaiseError(ex);
-
-def createOverlay():
+def createOverlay(controller):
     global overlay;
     global handle;
     arr = openvr.HmdMatrix34_t()
@@ -79,30 +99,27 @@ def createOverlay():
     arr[1][2] = 1
     arr[2][2] = 0
 
-    handle=overlay.createOverlay("OSCChatBox_Overlay", "OSC Slideshow Overlay");
-    # overlay.setOverlayTransformTrackedDeviceRelative(handle, openvr.k_unTrackedDeviceIndex_Hmd, arr);
-    hand = vrSystem.getTrackedDeviceIndexForControllerRole(openvr.TrackedControllerRole_RightHand)
-    overlay.setOverlayTransformTrackedDeviceRelative(handle, hand, arr);
+    handle=overlay.createOverlay(VR_OVERLAY_KEY, VR_OVERLAY_NAME);
+    overlay.setOverlayTransformTrackedDeviceRelative(handle, controller, arr);
     overlay.setOverlayAlpha(handle, 0.9)
     overlay.setOverlayWidthInMeters(handle, WIDTH_IN_METER);
     overlay.showOverlay(handle);
 
-def translateAndRaiseError(ex):
+def translateError(ex):
     errType = type(ex);
-    translation = errType.__name__;
+    translation = str(ex);
     if errType==openvr.error_code.InitError_Init_NoServerForBackgroundApp:
         translation = "You're not in VR right now";
     elif errType==openvr.error_code.InitError_Init_HmdNotFound:
         translation = "Your headset hasn't connected to your PC yet";
-    raise Exception(translation);
+    translation = translation if translation!="" else errType.__name__;
+    return translation;
 
-def outputString(text):
+def createImage(text):
     global font;
     global img;
     global draw;
-    global overlay;
     global imageData;
-    global handle;
     text = "\n".join(text);
     text = text.replace("\v", "\n").replace("\t","  ")
     draw.rectangle([(0, 0), (WIDTH, HEIGHT)], TRANSPARENT);
@@ -111,17 +128,25 @@ def outputString(text):
     draw.text((20, 20), text, "white", font);
     imageBytes = img.tobytes();
     imageData.value = imageBytes;
+
+def outputString(text):
+    global overlay;
+    global handle;
+    global vrSystem;
     try:
-        # Cause Request_Failed after a number of calls
-        # Log Message: Refusing to create memory block because 201 blocks are already outstanding
-        overlay.setOverlayRaw(handle, imageData, WIDTH, HEIGHT, 4)
+        if isOutputReady():
+            createImage(text);
+            # Cause Request_Failed after a number of calls
+            # Log Message: Refusing to create memory block because 201 blocks are already outstanding
+            overlay.setOverlayRaw(handle, imageData, WIDTH, HEIGHT, 4)
     except Exception as ex:
-        print(type(ex).__name__);
         if type(ex)==openvr.error_code.OverlayError_RequestFailed:
             # Not sure how to fix it, so the output will restart the overlay here
+            print("Run out of memory block, restarting overlay...");
             openvr.shutdown();
-            init();
+            vrSystem = None;
+            isOutputReady();
             time.sleep(0.5)
             overlay.setOverlayRaw(handle, imageData, WIDTH, HEIGHT, 4)
         else:
-            translateAndRaiseError(ex);
+            print(translateError(ex));
