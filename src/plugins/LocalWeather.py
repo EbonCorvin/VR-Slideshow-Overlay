@@ -12,7 +12,7 @@ REFRESH_RATE = 30;
 USE_FAHRENHEIT = False;
 
 MODULE_NAME = "LocalWeather";
-MODULE_DESC = "Show local weather. Warning: This could expose your physical location!"
+MODULE_DESC = "Show your city and the local weather"
 CITY_NAME = "";
 PLUGIN_ENABLED = False;
 config.addConfig(__name__, "CITY_NAME", "Enter the city name (City, country)\nLeave it empty to auto detect the city from your IP address", "str")

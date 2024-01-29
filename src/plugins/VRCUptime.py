@@ -2,7 +2,7 @@ import psutil;
 import datetime;
 
 MODULE_NAME = "GetVRCUptime";
-MODULE_DESC = "Show VRChat Uptime";
+MODULE_DESC = "Show your VRChat game uptime";
 class VRCUptime:
 
     def __init__(self) -> None:

@@ -12,7 +12,7 @@ OUTPUT_STRING = "Online Friends: %s\vFriends in Private: %s"
 REFRESH_RATE = 60;
 
 MODULE_NAME = "OnlineFriends";
-MODULE_DESC = "Show the number of your online friends, and tell you why 'orange' is killing VRChat"
+MODULE_DESC = "Show the number of your online friends and those who are in a private world"
 
 config.addConfig(__name__, "AUTH_COOKIE", "Your VRChat auth cookie. Grab it from VRChat's homepage", "str")
 config.addConfig(__name__, "REFRESH_RATE", "Refresh interval in second. Don't update your friend list too frequently!", "num")

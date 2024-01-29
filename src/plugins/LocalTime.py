@@ -2,10 +2,10 @@ import datetime;
 import config;
 
 MODULE_NAME = "LocalTime";
-MODULE_DESC = "Show Local Time"
+MODULE_DESC = "Show your local time"
 
 TWENTYFOUR_FORMAT = True;
-CAPTION = "My local time: ";
+CAPTION = "Local time - ";
 config.addConfig(__name__, "TWENTYFOUR_FORMAT", "Use 24-hour format (military time) format?", "bool")
 config.addConfig(__name__, "CAPTION", "Text to be displayed before the time", "str")
 

@@ -1,7 +1,7 @@
 from ctypes import *;
 
 MODULE_NAME = "ForegroundWindow";
-MODULE_DESC = "Show the title of the top window on your desktop, use at your own risk"
+MODULE_DESC = "Show the title of the top window on your desktop"
 PLUGIN_ENABLED = False;
 class ForegroundWindow:
     def onUpdate(self, scriptUpTime):
