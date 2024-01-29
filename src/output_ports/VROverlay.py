@@ -27,10 +27,13 @@ overlay = None;
 handle = None;
 vrSystem = None;
 imageData = None;
+posMatrix = None;
 
 def init():
+    global posMatrix;
     if openvr.isRuntimeInstalled()==0 or openvr.isHmdPresent()==0:
         raise Exception("This feature requires a VR headset!");
+    posMatrix = overlayMatrix();
     isOutputReady();
     initImage();
 
@@ -56,7 +59,9 @@ def isOutputReady():
         try:
             handle = overlay.findOverlay(VR_OVERLAY_KEY);
         except openvr.error_code.OverlayError_UnknownOverlay:
-            createOverlay(controller);
+            handle = createOverlay();
+        # Attach the overlay on the "correct" right hand (In case user may switch their controllers)
+        overlay.setOverlayTransformTrackedDeviceRelative(handle, controller, posMatrix);
         return True;
     except Exception as ex:
         print(translateError(ex))
@@ -72,10 +77,8 @@ def initImage():
     draw = ImageDraw.Draw(img);
     imageData = ctypes.c_buffer(b'', WIDTH * HEIGHT * 4);
 
-def createOverlay(controller):
-    global overlay;
-    global handle;
-    arr = openvr.HmdMatrix34_t()
+def overlayMatrix():
+    arr = openvr.HmdMatrix34_t();
     # https://www.brainvoyager.com/bv/doc/UsersGuide/CoordsAndTransforms/SpatialTransformationMatrices.html
     # Position
     arr[0][0] = 1
@@ -99,11 +102,14 @@ def createOverlay(controller):
     arr[1][2] = 1
     arr[2][2] = 0
 
+    return arr;
+
+def createOverlay():
     handle=overlay.createOverlay(VR_OVERLAY_KEY, VR_OVERLAY_NAME);
-    overlay.setOverlayTransformTrackedDeviceRelative(handle, controller, arr);
     overlay.setOverlayAlpha(handle, 0.9)
     overlay.setOverlayWidthInMeters(handle, WIDTH_IN_METER);
     overlay.showOverlay(handle);
+    return handle;
 
 def translateError(ex):
     errType = type(ex);
@@ -116,10 +122,6 @@ def translateError(ex):
     return translation;
 
 def createImage(text):
-    global font;
-    global img;
-    global draw;
-    global imageData;
     text = "\n".join(text);
     text = text.replace("\v", "\n").replace("\t","  ")
     draw.rectangle([(0, 0), (WIDTH, HEIGHT)], TRANSPARENT);
@@ -130,8 +132,6 @@ def createImage(text):
     imageData.value = imageBytes;
 
 def outputString(text):
-    global overlay;
-    global handle;
     global vrSystem;
     try:
         if isOutputReady():
