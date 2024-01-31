@@ -1,6 +1,6 @@
 from plugins.lib import GPUtil
 
-MODULE_NAME = "GetGPUUsage";
+MODULE_NAME = "GPUUsage";
 MODULE_DESC = "Show your nvidia GPU Usage"
 class GPUUsage:
 

@@ -1,6 +1,6 @@
 import psutil;
 
-MODULE_NAME = "GetPCUsage";
+MODULE_NAME = "PCUsage";
 MODULE_DESC = "Show PC Usage"
 class PCUsage:
 

@@ -8,14 +8,16 @@ config.add_general_setting_path("VROverlay (Experimental)", "output_ports.VROver
 config.addConfig("VROverlay (Experimental)", "IS_ENABLED", "Enable outputting to VROverlay?", "bool")
 
 IS_ENABLED = False;
+
 # TODO: Check if every Windows system has the font file "MSYH" (Microsoft YaHei)
 FONT_NAME = "msyh.ttc";
-
 TRANSPARENT = ImageColor.getrgb("#FFFFFF00");
 OVERLAY_BACKGROUND = ImageColor.getrgb("#000000AA");
+SIZE_RATIO = 1.6;
+WIDTH = 500;
+HEIGHT = round(WIDTH / SIZE_RATIO);
+OVERLAY_PADDING = 10;
 
-WIDTH = 400;
-HEIGHT = 250
 WIDTH_IN_METER = 0.15
 VR_OVERLAY_KEY = "OSCChatBox_Overlay";
 VR_OVERLAY_NAME = "OSC Slideshow Overlay";
@@ -44,14 +46,6 @@ def isOutputReady():
     try:
         if vrSystem is None:
             vrSystem = openvr.init(openvr.VRApplication_Background);
-        # Not sure if we need it or not, because if you close SteamVR,
-        # it closes everything for you, including this script and VRChat
-        # vrEvent = openvr.VREvent_t();
-        # vrSystem.pollNextEvent(vrEvent);
-        # if(vrEvent.eventType==openvr.VREvent_Quit):
-        #     openvr.shutdown();
-        #     vrSystem = None;
-        #     raise Exception("You are exiting VR, cleaning up...");
         controller = vrSystem.getTrackedDeviceIndexForControllerRole(openvr.TrackedControllerRole_RightHand)
         if controller==openvr.k_unTrackedDeviceIndexInvalid:
             raise Exception("No valid controller found. Did it turn off?")
@@ -121,13 +115,18 @@ def translateError(ex):
     translation = translation if translation!="" else errType.__name__;
     return translation;
 
-def createImage(text):
-    text = "\n".join(text);
+def createImage(pText):
+    text = "\n".join(pText);
     text = text.replace("\v", "\n").replace("\t","  ")
+    pText = text.split("\n");
     draw.rectangle([(0, 0), (WIDTH, HEIGHT)], TRANSPARENT);
-    boundary = draw.textbbox((20,20),text, font);
-    draw.rectangle([(1, 1), (boundary[2] - boundary[0] + 40 , boundary[3] - boundary[1] + 40)], OVERLAY_BACKGROUND, "black", 0);
-    draw.text((20, 20), text, "white", font);
+    boundary = draw.textbbox((OVERLAY_PADDING,OVERLAY_PADDING),text, font);
+    textRectW = min(boundary[2] - boundary[0], WIDTH);
+    textRectH = min(boundary[3] - boundary[1], HEIGHT);
+    startX = max((WIDTH - textRectW) / 2, OVERLAY_PADDING)
+    startY = HEIGHT - textRectH - boundary[1];
+    draw.rectangle([(startX - OVERLAY_PADDING  , startY - OVERLAY_PADDING), ( min(startX + textRectW + OVERLAY_PADDING, WIDTH) - 1 , HEIGHT - 1)], OVERLAY_BACKGROUND, "white", 1);
+    draw.text((startX, startY), text, "white", font);
     imageBytes = img.tobytes();
     imageData.value = imageBytes;
 

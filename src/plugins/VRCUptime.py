@@ -1,7 +1,7 @@
 import psutil;
 import datetime;
 
-MODULE_NAME = "GetVRCUptime";
+MODULE_NAME = "VRCUptime";
 MODULE_DESC = "Show your VRChat game uptime";
 class VRCUptime:
 
