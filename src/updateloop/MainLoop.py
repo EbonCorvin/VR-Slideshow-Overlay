@@ -1,5 +1,5 @@
 import time
-from output_ports import VRCOsc, FileOutput, VROverlay
+from output_ports import VROverlay, VRCOsc, FileOutput;
 import config;
 from updateloop import LoadPlugins
 

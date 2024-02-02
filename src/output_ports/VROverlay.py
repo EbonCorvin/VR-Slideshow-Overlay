@@ -6,8 +6,10 @@ import time
 
 config.add_general_setting_path("VROverlay (Experimental)", "output_ports.VROverlay")
 config.addConfig("VROverlay (Experimental)", "IS_ENABLED", "Enable outputting to VROverlay?", "bool")
+config.addConfig("VROverlay (Experimental)", "IS_RIGHT_HAND", "Attach overlay on the right hand?", "bool")
 
 IS_ENABLED = False;
+IS_RIGHT_HAND = True;
 
 # TODO: Check if every Windows system has the font file "MSYH" (Microsoft YaHei)
 FONT_NAME = "msyh.ttc";
@@ -19,8 +21,8 @@ HEIGHT = round(WIDTH / SIZE_RATIO);
 OVERLAY_PADDING = 10;
 
 WIDTH_IN_METER = 0.15
-VR_OVERLAY_KEY = "OSCChatBox_Overlay";
-VR_OVERLAY_NAME = "OSC Slideshow Overlay";
+VR_OVERLAY_KEY = "VRSlideshow_Overlay";
+VR_OVERLAY_NAME = "VR Slideshow Overlay";
 
 font = None;
 img = None;
@@ -30,12 +32,16 @@ handle = None;
 vrSystem = None;
 imageData = None;
 posMatrix = None;
+controllerConstant = None;
+
 
 def init():
     global posMatrix;
+    global controllerConstant;
     if openvr.isRuntimeInstalled()==0 or openvr.isHmdPresent()==0:
         raise Exception("This feature requires a VR headset!");
     posMatrix = overlayMatrix();
+    controllerConstant = openvr.TrackedControllerRole_RightHand if IS_RIGHT_HAND else openvr.TrackedControllerRole_LeftHand;
     isOutputReady();
     initImage();
 
@@ -46,7 +52,7 @@ def isOutputReady():
     try:
         if vrSystem is None:
             vrSystem = openvr.init(openvr.VRApplication_Background);
-        controller = vrSystem.getTrackedDeviceIndexForControllerRole(openvr.TrackedControllerRole_RightHand)
+        controller = vrSystem.getTrackedDeviceIndexForControllerRole(controllerConstant)
         if controller==openvr.k_unTrackedDeviceIndexInvalid:
             raise Exception("No valid controller found. Did it turn off?")
         overlay = openvr.IVROverlay();

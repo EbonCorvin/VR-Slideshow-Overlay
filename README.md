@@ -1,4 +1,4 @@
-# OSC Chatbox Slideshow
+# VR Slideshow Overlay
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
@@ -10,7 +10,7 @@ You may get a false antivirus alarm (e.g. Avast) when you are trying to run the 
 
 Please grab the latest stable built version (exe) from the "Releases" section (right panel) or pull the latest source code and run it in Python.
 
-It's a simple OSC chatbox slideshow application that show various information in VRChat's chatbox and / or VR Overlay.
+It's a simple VR overlay application that show various information in VR Overlay, VRChat's chatbox and / or Text file. Although the program was original made for outputting text to VRChat's chatbox, it can run without having VRChat running at the same time.
 
 It comes with 9 slideshow plugins that provide various information, and you can configure most of them to your need with a graphical user interface.
 
@@ -30,10 +30,11 @@ The application comes with the following slideshow plugins:
 
 Every slideshow plugin is a Python script that you can edit in the “plugins” folder. You can also create your own plugin to display information the original application doesn’t support. Please have a look at the in the “example” folder.
 
-Also, other than outputting to VRChat, you can also enable outputting to other location:
+The program supports outputting to:
 
+- OpenVR overlay. A overlay will attach to the hand of your choose. Currently customization options are limited, and will provide more options in the future update.
+- VRChat chatbox. Output the text to VRChat's chatbox via OSC.
 - Text file. Useful if you want the output text to be read by other application, like OBS streaming application.
-- OpenVR overlay (Experimental). You can keep the output text to yourself by displaying them in VR overlay. Currently the overlay is attached on your right controller, and the customization option is limited. Also expect bugs because it's still an experimental feature!
 
 The application may open to create new output location. For now, you can look at the example folder and see how you create a new output location.
 
@@ -55,12 +56,13 @@ If you want to run the script by yourself, you may have to install the following
 - GPUtil
 - requests
 - openvr
+- pillow
 
 I assume everyone who choose to run the script by themselves already have the experience on Python programming. Please try not to ask me about running the script by themselves.
 
 ## Usage
 
-If you downladed the built (exe) version, please run osc_start.exe to start the application. If you pulled the whole source code, please run osc_start.py in Python.
+If you downladed the built (exe) version, please run vr_overlay.exe to start the application. If you pulled the whole source code, please run vr_overlay.py in Python.
 
 A window will appear after you run the application. You can click on the "Start" button to start outputting text to VRChat immediately; Or click on the "Setting..." button for the "Setting Screen".
 

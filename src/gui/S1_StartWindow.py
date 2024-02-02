@@ -5,10 +5,10 @@ class App:
     def __init__(self, root, commandCallback):
         self.commandCallback = commandCallback;
 
-        root.title("VRChat Chatbox Slideshow")
+        root.title("VR Slideshow Overlay")
         root.resizable(width=False, height=False)
 
-        app_name_label = tk.Label(root, text="OSC Chatbox Slideshow", font=("Segoe UI", 20))
+        app_name_label = tk.Label(root, text="VR Slideshow Overlay", font=("Segoe UI", 20))
         app_name_label.grid(row=0, columnspan=2, padx=10, pady=20)
         app_name_label["justify"] = "center"
 
