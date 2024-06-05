@@ -2,6 +2,13 @@
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
+<img width="250" src="https://github.com/EbonCorvin/VR-Slideshow-Overlay/assets/153107703/08332a7c-0bfa-475e-b808-eb3e7dcb25f7">
+<img width="250" src="https://github.com/EbonCorvin/VR-Slideshow-Overlay/assets/153107703/df7b7f81-6a8d-42eb-9fbc-face108c264b">
+<img width="250" src="https://github.com/EbonCorvin/VR-Slideshow-Overlay/assets/153107703/a6b6c0cd-a116-43f6-820f-2ac4c6d0f552">
+
+(Sorry, I don't have time to make promotional material at the moment, so here are some screenshots of how it looks like in VR)
+
+
 ## False antivirus alarm
 
 You may get a false antivirus alarm (e.g. Avast) when you are trying to run the built version (exe). Please add the location of the application as an exception in your antivirus software or pull the whole source code and run it in Python instead.
@@ -13,6 +20,8 @@ Please grab the latest stable built version (exe) from the "Releases" section (r
 It's a simple VR overlay application that show various information in VR Overlay, VRChat's chatbox and / or Text file. Although the program was original made for outputting text to VRChat's chatbox, it can run without having VRChat running at the same time.
 
 It comes with 9 slideshow plugins that provide various information, and you can configure most of them to your need with a graphical user interface.
+
+<img width="320" src="https://github.com/EbonCorvin/VR-Slideshow-Overlay/assets/153107703/447a24b3-80c3-4856-a5d2-bcab690d723c">
 
 ## Features
 
